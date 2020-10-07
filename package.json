@@ -17,5 +17,9 @@
     "style-loader": "^1.2.1",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "element-ui": "^2.13.2",
+    "jquery": "^3.5.1"
   }
 }

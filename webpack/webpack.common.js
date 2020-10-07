@@ -58,16 +58,23 @@ module.exports = {
     new MiniCssExtractPlugin({
       // path: path.resolve(__dirname, '../dist/css'), 不管用
       // 为了css的更好缓存，推荐使用contenthash 而不是chunkhash
-      filename: 'css/[name].[contenthash:6].css'
+      filename: 'css/[name].[contenthash:6].css',
+      // MiniCssExtractPlugin也会自动将动态生成的chunk中的css分离出来，如果没有设置chunkFilename的话，会以filename为准。
+      chunkFilename: 'css/[name].[contenthash:6].css'
     })
   ],
   output: {
     path: path.resolve(__dirname, '../dist'),
     // name 对应 entry中的属性name   hash chunkhash contenthash
     // filename: '[name].[hash:6].js'
-    filename: '[name].[chunkhash:6].js',
+    filename: 'js/[name].[chunkhash:6].js',
     // 用来定义在使用CommonChunkPlugin或者动态加载过程中生成的额外chunk。不会影响到MiniCssExtractPlugin抽离出来的css命名。
-    chunkFilename: '[name].[contenthash]'
+    chunkFilename: 'js/[name].[contenthash].js',
+    // 如果项目想要作为第三方库的话 需要设置导出的变量。libraryTarget用来设置该变量可以以何种方式引用。
+    library: 'myLibrary',
+    // libraryTarget: 'var', // 作为一个全局变量，通过 script 标签来访问
+    // libraryTarget: 'window', // 通过 window 对象访问，在浏览器中
+    // libraryTarget: 'umd', // 在 AMD 或 CommonJS 的 require 之后可访问
   }
 }
 
