@@ -40,11 +40,20 @@ module.exports = {
       {
         test: /\.(jpg|jpeg|png)/,
         use: [
+          // {
+          //   loader: 'file-loader',
+          //   options: {
+          //     name: 'image/[name].[hash:6].[ext]',
+          //     // outputPath: 'images'
+          //   }
+          // },
+          // url-loader如果不设置limit 默认会将所有图片路径转为dataUrl 此时不依赖file-loader url-loader可独立使用
+          // 如果设置了limit 而且有超过limit大小限制的图片 此时就依赖file-loader 需要yarn add file-loader -D 否则在打包过程中会报错提示找不到file-loader。然后options中可以使用file-loader的相关配置 如name、outputPath等 url-loader会自动调用file-loader并传入参数
           {
-            loader: 'file-loader',
+            loader: 'url-loader',
             options: {
               name: 'image/[name].[hash:6].[ext]',
-              // outputPath: 'images'
+              limit: 100 * 1024
             }
           }
         ]
