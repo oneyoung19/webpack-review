@@ -30,8 +30,24 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
+              // ！！！解决在使用MiniCssExtractPlugin分离css后 css中的背景图片路径不正确的问题。
+              // 譬如css会分离在dist/css中 背景图片被file-loader的image/[name].[hash:6].[ext]分离在dist/image中 不管背景图片的引用路径是什么 都会变成url('image/[name].[hash:6].[ext]')这种形式。 但由于背景图片是在dist/css目录下 这样资源的真实路径就会变成dist/css/image/[name].[hash:6].[ext] 很明显是不正确的 实际上的资源路径为dist/image/[name].[hash:6].[ext] 这样就需要我们配置下publicPath: '../'
+              // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27
+              publicPath: '../'
             }
           }, 'css-loader']
+      },
+      {
+        test: /\.(jpg|jpeg|png)/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'image/[name].[hash:6].[ext]',
+              // outputPath: 'images'
+            }
+          }
+        ]
       }
     ]
   },
@@ -60,7 +76,7 @@ module.exports = {
       // 为了css的更好缓存，推荐使用contenthash 而不是chunkhash
       filename: 'css/[name].[contenthash:6].css',
       // MiniCssExtractPlugin也会自动将动态生成的chunk中的css分离出来，如果没有设置chunkFilename的话，会以filename为准。
-      chunkFilename: 'css/[name].[contenthash:6].css'
+      chunkFilename: 'css/[name].[contenthash:6].css',
     })
   ],
   output: {

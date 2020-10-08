@@ -1,3 +1,10 @@
 body {
   background-color: skyblue;
 }
+
+.bgImage {
+  width: 200px;
+  height: 200px;
+  /* 在使用file-loader后 这里的url会被重新替换成新路径 */
+  background-image: url('../images/test.png');
+}
