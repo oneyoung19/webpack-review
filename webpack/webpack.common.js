@@ -9,13 +9,14 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
   mode: 'development',
-  // 字符串形式 简写 entry: '../src/main.js'
+  // 字符串形式 简写 
+  entry: path.resolve(__dirname, '../src/main.js'),
   // 数组形式 将这两入口文件及其依赖打包成一个。打包后的代码执行顺序跟在数组中的顺序相关。
   // entry: [path.resolve(__dirname, '../src/sub.js'), path.resolve(__dirname, '../src/main.js')],
   // 对象形式(单个属性)
-  entry: {
-    main: path.resolve(__dirname, '../src/main.js')
-  },
+  // entry: {
+  //   main: path.resolve(__dirname, '../src/main.js')
+  // },
   // 对象形式(多个属性) 会以这两个属性的对应文件为入口 然后递归依赖 打包成各个对应的bundle包
   // entry: {
   //   main: path.resolve(__dirname, '../src/main.js'),
@@ -92,14 +93,18 @@ module.exports = {
     path: path.resolve(__dirname, '../dist'),
     // name 对应 entry中的属性name   hash chunkhash contenthash
     // filename: '[name].[hash:6].js'
-    filename: 'js/[name].[chunkhash:6].js',
+    // filename: 'js/[name].[contenthash:6].js',
     // 用来定义在使用CommonChunkPlugin或者动态加载过程中生成的额外chunk。不会影响到MiniCssExtractPlugin抽离出来的css命名。
-    chunkFilename: 'js/[name].[contenthash].js',
+    // chunkFilename: 'js/[name].[contenthash].js',
     // 如果项目想要作为第三方库的话 需要设置导出的变量。libraryTarget用来设置该变量可以以何种方式引用。
     library: 'myLibrary',
     // libraryTarget: 'var', // 作为一个全局变量，通过 script 标签来访问
     // libraryTarget: 'window', // 通过 window 对象访问，在浏览器中
     // libraryTarget: 'umd', // 在 AMD 或 CommonJS 的 require 之后可访问
+
+    // filename以及chunkFilename 推荐使用chunkhash 而不是contenthash 因为依赖的css文件内容的改变 不会影响到输出JS文件的contenthash
+    filename: 'js/[name].[chunkhash:6].js',
+    chunkFilename: 'js/[name].[chunkhash:6].js'
   }
 }
 

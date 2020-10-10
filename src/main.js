@@ -36,7 +36,7 @@ const bgImage = document.createElement('div')
 bgImage.setAttribute('class', 'bgImage')
 document.body.appendChild(bgImage)
 
-// file-loader 可以解析直接使用模块化导入的图片 以及 在模板中使用img标签引入的图片。不能解析使用img.src='/path/to/img'这种语法的图片。
+// file-loader 可以解析直接使用模块化导入的图片 以及 在模板中使用img标签引入的图片或者css背景引入的图片。不能解析使用img.src='/path/to/img'这种语法的图片。
 export default {
   library: '---export default library---'
 }
