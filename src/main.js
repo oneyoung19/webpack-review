@@ -1,9 +1,14 @@
 import fn from './fn.js'
 import './css/index.css'
+import $ from 'jquery'
+// import { getDate } from './utils/utils'
+import './utils/utils'
 import avatar from './images/avatar.jpeg'
+// import lodash from 'lodash'
 console.log({ avatar })
+console.log($)
 
-console.log('i am main. Haha')
+console.log('i am main.js')
 fn()
 
 const h1 = document.createElement('h1')
@@ -18,7 +23,8 @@ var btn = document.createElement('button')
 btn.innerText = 'click'
 document.body.appendChild(btn)
 btn.onclick = function() {
-  import('./dynamic')
+  import('./a')
+  import('./b')
 }
 
 // import image
@@ -37,6 +43,9 @@ bgImage.setAttribute('class', 'bgImage')
 document.body.appendChild(bgImage)
 
 // file-loader 可以解析直接使用模块化导入的图片 以及 在模板中使用img标签引入的图片或者css背景引入的图片。不能解析使用img.src='/path/to/img'这种语法的图片。
+
+
+// getDate()
 export default {
   library: '---export default library---'
 }
