@@ -5,6 +5,10 @@ import $ from 'jquery'
 import './utils/utils'
 import avatar from './images/avatar.jpeg'
 // import lodash from 'lodash'
+
+import moment from 'moment'
+import vue from 'vue'
+import element from 'element-ui'
 console.log({ avatar })
 console.log($)
 
@@ -47,7 +51,7 @@ document.body.appendChild(bgImage)
 
 // getDate()
 export default {
-  library: '---export default library---'
+  alpha: 'export default--message'
 }
 
-export const library = '---export library---'
+export const beta = 'export--message'

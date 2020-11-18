@@ -8,9 +8,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 // 压缩
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const webpack = require('webpack')
 // 检测模块 分析模块
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-module.exports = {
+
+const config = {
   mode: 'development',
   // 字符串形式 简写 
   entry: path.resolve(__dirname, '../src/main.js'),
@@ -66,9 +68,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '../index.html')
-    }),
+    
     new CleanWebpackPlugin(),
     // 注意这个patterns 以前的CopyWebpackPlugin版本是没有patterns这个参数的。
     new CopyWebpackPlugin({
@@ -82,6 +82,10 @@ module.exports = {
           from: path.resolve(__dirname, '../vendor'),
           to: path.resolve(__dirname, '../dist/wendor'),
           // flatten: true
+        },
+        {
+          from: path.resolve(__dirname, '../static'),
+          to: path.resolve(__dirname, '../dist/static')
         }
       ]
     }),
@@ -105,9 +109,23 @@ module.exports = {
       // 压缩比例 1-10 数值越大 压缩效果越好 但也会更加耗时
       minRatio: 8,
       // 压缩文件后 是否删除源文件 默认不删除
-      deleteOriginalAssets: true
+      deleteOriginalAssets: false
     }),
+    new webpack.DllReferencePlugin({
+      // 配置manifest文件的路径
+      context: __dirname,
+      // context: path.resolve(__dirname, './'),
+      manifest: require('./dll/vendor.manifest.json')
+    }),
+    // new webpack.DllReferencePlugin({
+    //   // 配置manifest文件的路径
+    //   context: path.resolve(__dirname, './'),
+    //   manifest: require('./dll/element.manifest.json')
+    // })
     // new BundleAnalyzerPlugin()
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, '../index.html')
+    }),
   ],
   output: {
     path: path.resolve(__dirname, '../dist'),
@@ -118,9 +136,10 @@ module.exports = {
     // chunkFilename: 'js/[name].[contenthash].js',
     // 如果项目想要作为第三方库的话 需要设置导出的变量。libraryTarget用来设置该变量可以以何种方式引用。
     library: 'myLibrary',
+    libraryExport: 'default',
     // libraryTarget: 'var', // 作为一个全局变量，通过 script 标签来访问
     // libraryTarget: 'window', // 通过 window 对象访问，在浏览器中
-    // libraryTarget: 'umd', // 在 AMD 或 CommonJS 的 require 之后可访问
+    libraryTarget: 'umd', // 在 AMD 或 CommonJS 的 require 之后可访问
 
     // filename以及chunkFilename 推荐使用chunkhash 而不是contenthash 因为依赖的css文件内容的改变 不会影响到输出JS文件的contenthash
     filename: 'js/[name].[chunkhash:4].js',
@@ -177,6 +196,12 @@ module.exports = {
   }
 }
 
+// yarn report时 process.env.npm_config_report为true
+if (process.env.npm_config_report) {
+  config.plugins.push(new BundleAnalyzerPlugin())
+}
+
+module.exports = config
 // hash 每次打包如果整个项目没有变，则不变
 // chunkhash 每次打包如果整个chunk没有变，则不变。
 // contenthash 每次打包如果文件内容没有变，则该文件的contenthash不会变。
